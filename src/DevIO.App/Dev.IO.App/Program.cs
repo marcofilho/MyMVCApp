@@ -1,5 +1,7 @@
 using Dev.IO.App.Data;
+using DevIO.Business.Interfaces;
 using DevIO.Data.Context;
+using DevIO.Data.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +13,6 @@ namespace Dev.IO.App
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
                 ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             
@@ -20,6 +21,10 @@ namespace Dev.IO.App
 
             builder.Services.AddDbContext<DevIODbContext>(options =>
               options.UseSqlServer(connectionString));
+
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+            builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -30,7 +35,6 @@ namespace Dev.IO.App
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseMigrationsEndPoint();
@@ -38,7 +42,6 @@ namespace Dev.IO.App
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
