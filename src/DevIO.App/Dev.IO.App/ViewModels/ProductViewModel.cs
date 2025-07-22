@@ -16,12 +16,13 @@ namespace DevIO.App.ViewModels
         public string Name { get; set; }
 
         [Required(ErrorMessage = "The field {0} is required.")]
-        [StringLength(200, ErrorMessage = "The field {0} must have between {2} and {1} characters", MinimumLength = 2)]
+        [StringLength(100, ErrorMessage = "The field {0} must have between {2} and {1} characters", MinimumLength = 2)]
         public string Description { get; set; }
 
         public string Image { get; set; }
 
-        //public IFormFile ImageUpload { get; set; }
+        [Display(Name = "Product Image")]
+        public IFormFile ImageUpload { get; set; }
 
         [Required(ErrorMessage = "The field {0} is required.")]
         public decimal Price { get; set; }

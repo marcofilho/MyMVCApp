@@ -43,7 +43,7 @@ namespace DevIO.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SupplierId,Name,Description,Image,Price,Active")] ProductViewModel productViewModel)
+        public async Task<IActionResult> Create(ProductViewModel productViewModel)
         {
             productViewModel = await SetSuppliers(productViewModel);
 

@@ -42,7 +42,7 @@ namespace DevIO.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Document,SupplierType,Active")] SupplierViewModel supplierViewModel)
+        public async Task<IActionResult> Create(SupplierViewModel supplierViewModel)
         {
             if (!ModelState.IsValid) return View(supplierViewModel);
 
