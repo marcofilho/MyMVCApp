@@ -1,11 +1,11 @@
-using Dev.IO.App.Data;
+using DevIO.App.Data;
 using DevIO.Business.Interfaces;
 using DevIO.Data.Context;
 using DevIO.Data.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Dev.IO.App
+namespace DevIO.App
 {
     public class Program
     {
@@ -21,6 +21,8 @@ namespace Dev.IO.App
 
             builder.Services.AddDbContext<DevIODbContext>(options =>
               options.UseSqlServer(connectionString));
+
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();

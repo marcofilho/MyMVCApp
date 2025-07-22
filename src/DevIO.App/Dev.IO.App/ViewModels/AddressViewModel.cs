@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace Dev.IO.App.Models
+namespace DevIO.App.ViewModels
 {
     public class AddressViewModel
     {

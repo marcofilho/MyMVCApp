@@ -25,7 +25,7 @@ namespace DevIO.Data.Repository
                 .OrderBy(p => p.Name).ToListAsync();
         }
 
-        public async Task<IEnumerable<Product>> GetProductsBySupplier(Guid supplierId)
+        public async Task<IEnumerable<Product>> GetProductsSuppliers(Guid supplierId)
         {
             return await FindAsync(p => p.SupplierId == supplierId);
         }

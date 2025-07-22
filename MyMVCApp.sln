@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36301.6
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.IO.App", "src\DevIO.App\Dev.IO.App\Dev.IO.App.csproj", "{E186046A-8A26-4060-B844-FE4F69202B62}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevIO.App", "src\DevIO.App\Dev.IO.App\DevIO.App.csproj", "{E186046A-8A26-4060-B844-FE4F69202B62}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevIO.Business", "src\DevIO.Business\DevIO.Business.csproj", "{B4A48C8F-48FD-4A3C-BF8E-9B8892C40DEB}"
 EndProject

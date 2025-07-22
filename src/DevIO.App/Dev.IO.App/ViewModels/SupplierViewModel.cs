@@ -1,7 +1,7 @@
 ﻿using DevIO.Business.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace Dev.IO.App.Models
+namespace DevIO.App.ViewModels
 {
     public class SupplierViewModel
     {
@@ -17,7 +17,7 @@ namespace Dev.IO.App.Models
         public string Document { get; set; }
 
         [Display(Name = "Supplier Type")]
-        public SupplierType SupplierType { get; set; }
+        public SupplierType Type { get; set; }
 
         [Display(Name = "Is Active?")]
         public bool Active { get; set; }
