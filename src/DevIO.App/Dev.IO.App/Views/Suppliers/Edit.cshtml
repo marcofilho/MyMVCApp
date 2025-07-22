@@ -1,12 +1,10 @@
 ﻿@model DevIO.App.ViewModels.SupplierViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit" + Model.Name;
 }
 
-<h1>Edit</h1>
-
-<h4>SupplierViewModel</h4>
+<h4 style="padding: 30px">@ViewData["Title"]</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">

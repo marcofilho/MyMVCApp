@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DevIO.App.Extensions;
+using System.ComponentModel.DataAnnotations;
 
 namespace DevIO.App.ViewModels
 {
@@ -24,6 +25,7 @@ namespace DevIO.App.ViewModels
         [Display(Name = "Product Image")]
         public IFormFile ImageUpload { get; set; }
 
+        [Currency]
         [Required(ErrorMessage = "The field {0} is required.")]
         public decimal Price { get; set; }
 

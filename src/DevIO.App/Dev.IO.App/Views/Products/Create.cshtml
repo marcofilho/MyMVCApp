@@ -8,8 +8,9 @@
 
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-10">
         <form enctype="multipart/form-data" asp-action="Create">
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
@@ -17,6 +18,7 @@
                 <select asp-for="SupplierId" class="form-control" asp-items="@(new SelectList(Model.Suppliers, "Id", "Name"))">
                     <option></option>
                 </select>
+                <span asp-validation-for="SupplierId" class="text-danger"></span>
             </div>
 
             <div class="form-group">
@@ -27,7 +29,7 @@
 
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <textarea cols="40" rows="5" asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
@@ -35,9 +37,9 @@
                 <label asp-for="ImageUpload" class="control-label"></label>
 
                 <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="ImageUpload" asp-for="ImageUpload">
-                    <label data-browse="Search" style="width: 400px" class="custom-file-label" for="ImageUpload"></label>
-                    <label style="display: none" id="img_name"></label>
+                    <input type="file" class="custom-file-input" id="ImagemUpload" asp-for="ImageUpload">
+                    <label data-browse="Search" style="width: 400px" class="custom-file-label" for="ImagemUpload"></label>
+                    <label style="display: none" id="img_nome"></label>
                 </div>
 
                 <span asp-validation-for="ImageUpload" class="text-danger"></span>
@@ -69,13 +71,13 @@
     }
 
     <script>
-        $("#ImageUpload").change(function() {
-            $("#img_name").text(this.files[0].name);
-            $("#img_name")[].style.display = "block";
+        $("#ImagemUpload").change(function () {
+            $("#img_nome").text(this.files[0].name);
+            $("#img_nome")[0].style.display = 'block';
         });
 
-        $("#ImageUpload").attr("data-val", "true");
-        $("#ImageUpload").attr("data-val-required", "Please fill the Image field.");
+        $("#ImagemUpload").attr("data-val", "true");
+        $("#ImagemUpload").attr("data-val-required", "Fill the image field.");
     </script>
 
 }
