@@ -129,9 +129,12 @@ namespace DevIO.App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateAddress(SupplierViewModel supplierViewModel)
         {
+            ModelState.Remove("Name");
+            ModelState.Remove("Document");
+
             if (!ModelState.IsValid) return PartialView("_UpdateAddress", supplierViewModel);
 
-            await _supplierRepository.UpdateAsync(_mapper.Map<Supplier>(supplierViewModel));
+            await _addressRepository.UpdateAsync(_mapper.Map<Address>(supplierViewModel.Address));
 
             var url = Url.Action("GetAddress", "Suppliers", new { id = supplierViewModel.Address.SupplierId });
             return Json(new { success = true, url });
