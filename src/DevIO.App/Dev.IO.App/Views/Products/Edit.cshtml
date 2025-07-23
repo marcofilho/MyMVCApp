@@ -1,13 +1,13 @@
 ﻿@model DevIO.App.ViewModels.ProductViewModel
 
 @{
-    ViewData["Title"] = "Edit " + Model.Name;
+    ViewData["Title"] = "Edit Product: " + Model.Name;
 }
 
-<h4 style="padding: 30px">@ViewData["Title"]</h4>
+<h4 style="padding-top: 30px">@ViewData["Title"] </h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-10">
         <form enctype="multipart/form-data" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -15,7 +15,9 @@
 
             <div class="form-group">
                 <label asp-for="SupplierId" class="control-label"></label><br />
-                <label><b>@Model.Supplier.Name</b></label>
+                <select asp-for="SupplierId" class="form-control" asp-items="@(new SelectList(Model.Suppliers, "Id", "Name", Model.SupplierId))">
+                    <option></option>
+                </select>
             </div>
 
             <div class="form-group">
@@ -23,15 +25,13 @@
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <textarea cols="40" rows="5" asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-
             <div class="form-group">
-                <label>Current Image</label><br />
+                <label>Imagem Atual</label><br />
                 <img src="~/images/@Model.Image" alt="@Model.Image" style="width: 70px; height: 100px" />
             </div>
 
@@ -49,13 +49,11 @@
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
-
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Active" /> @Html.DisplayNameFor(model => model.Active)
                 </label>
             </div>
-
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
                 <a class="btn btn-info" href="javascript:window.history.back();">Back</a>
@@ -64,13 +62,14 @@
     </div>
 </div>
 
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
     <script>
-        $('#ImageUpload').change(function () {
+        $("#ImageUpload").change(function () {
             $("#img_name").text(this.files[0].name);
             $("#img_name")[0].style.display = 'block';
         });
