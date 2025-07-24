@@ -1,13 +1,6 @@
-using DevIO.App.Data;
-using DevIO.App.Extensions;
-using DevIO.Business.Interfaces;
+using DevIO.App.Configurations;
 using DevIO.Data.Context;
-using DevIO.Data.Repository;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 
 namespace DevIO.App
 {
@@ -17,39 +10,35 @@ namespace DevIO.App
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            builder.Configuration
+                .SetBasePath(builder.Environment.ContentRootPath)
+                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true)
+                .AddEnvironmentVariables();
 
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            builder.Services.AddIdentityConfiguration(builder.Configuration);
 
             builder.Services.AddDbContext<DevIODbContext>(options =>
-              options.UseSqlServer(connectionString));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            builder.Services.AddScoped<IProductRepository, ProductRepository>();
-            builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
-            builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+            builder.Services.AddMvcConfiguration();
 
-            builder.Services.AddSingleton<IValidationAttributeAdapterProvider, CurrencyValidationAttributeAdapterProvider>();
-
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            builder.Services.AddControllersWithViews();
+            builder.Services.ResolveDependencies();
 
             var app = builder.Build();
 
+            // Configure
             if (app.Environment.IsDevelopment())
             {
+                app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/erro/500");
+                app.UseStatusCodePagesWithRedirects("/erro/{0}");
                 app.UseHsts();
             }
 
@@ -58,17 +47,10 @@ namespace DevIO.App
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            var defaultCulture = new CultureInfo("en-US");
-            var localizationOptions = new RequestLocalizationOptions
-            {
-                DefaultRequestCulture = new RequestCulture(defaultCulture),
-                SupportedCultures = new List<CultureInfo> { defaultCulture },
-                SupportedUICultures = new List<CultureInfo> { defaultCulture }
-            };
-
-            app.UseRequestLocalization(localizationOptions);
+            app.UseGlobalizationConfig();
 
             app.MapControllerRoute(
                 name: "default",
@@ -77,6 +59,7 @@ namespace DevIO.App
             app.MapRazorPages();
 
             app.Run();
+
         }
     }
 }
