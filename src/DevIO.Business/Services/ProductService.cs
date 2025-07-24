@@ -1,33 +1,47 @@
 ﻿using DevIO.Business.Interfaces;
 using DevIO.Business.Models;
+using DevIO.Business.Models.Validations;
 
 namespace DevIO.Business.Services
 {
     public class ProductService : BaseService, IProductService
     {
-        public Task<IEnumerable<Product>> GetAll()
+        private readonly IProductRepository _productRepository;
+
+        public ProductService(IProductRepository productRepository, INotificator notificator)
+                    : base(notificator)
         {
-            throw new NotImplementedException();
+            _productRepository = productRepository;
         }
 
-        public Task<Product> GetById(Guid id)
+        public async Task<IEnumerable<Product>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _productRepository.GetAllAsync();
         }
 
-        public Task Remove(Guid id)
+        public async Task<Product> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            return await _productRepository.GetByIdAsync(id);
         }
 
-        public Task Add(Product product)
+        public async Task Add(Product product)
         {
-            throw new NotImplementedException();
+            if (!ExecuteValidation(new ProductValidation(), product)) return;
+
+            await _productRepository.AddAsync(product);
         }
 
-        public Task Update(Product product)
+        public async Task Update(Product product)
         {
-            throw new NotImplementedException();
+            if (!ExecuteValidation(new ProductValidation(), product)) return;
+
+            await _productRepository.UpdateAsync(product);
         }
+
+        public async Task Remove(Guid id)
+        {
+            await _productRepository.RemoveAsync(id);
+        }
+
     }
 }

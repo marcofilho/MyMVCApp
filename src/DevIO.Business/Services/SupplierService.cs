@@ -1,36 +1,75 @@
 ﻿using DevIO.Business.Interfaces;
 using DevIO.Business.Models;
+using DevIO.Business.Models.Validations;
 
 namespace DevIO.Business.Services
 {
     public class SupplierService : BaseService, ISupplierService
     {
-        public Task<IEnumerable<Supplier>> GetAll()
+        private readonly ISupplierRepository _supplierRepository;
+        private readonly IAddressRepository _addressRepository;
+
+        public SupplierService(ISupplierRepository supplierRepository,
+                               IAddressRepository addressRepository,
+                               INotificator notificator) : base(notificator)
         {
-            throw new NotImplementedException();
+            _supplierRepository = supplierRepository;
+            _addressRepository = addressRepository;
         }
 
-        public Task<Supplier> GetById(Guid id)
+        public async Task<IEnumerable<Supplier>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _supplierRepository.GetAllAsync();
         }
 
-        public Task Add(Supplier supplier)
+        public async Task<Supplier> GetById(Guid id)
         {
-            throw new NotImplementedException();
-        }
-        public Task Update(Supplier supplier)
-        {
-            throw new NotImplementedException();
+            return await _supplierRepository.GetByIdAsync(id);
         }
 
-        public Task Remove(Guid id)
+        public async Task Add(Supplier supplier)
         {
-            throw new NotImplementedException();
+            if (!ExecuteValidation(new SupplierValidation(), supplier) &&
+               !ExecuteValidation(new AddressValidation(), supplier.Address)) return;
+
+            if (_supplierRepository.FindAsync(s => s.Document == supplier.Document).Result.Any())
+            {
+                Notify("A supplier with this document already exists.");
+                return;
+            }
+
+            await _supplierRepository.AddAsync(supplier);
         }
-        public Task UpdateAddress(Address address)
+
+        public async Task Update(Supplier supplier)
         {
-            throw new NotImplementedException();
+            if (!ExecuteValidation(new SupplierValidation(), supplier)) return;
+
+            if (_supplierRepository.FindAsync(s => s.Document == supplier.Document && s.Id != supplier.Id).Result.Any())
+            {
+                Notify("A supplier with this document already exists.");
+                return;
+            }
+
+            await _supplierRepository.UpdateAsync(supplier);
+        }
+
+        public async Task Remove(Guid id)
+        {
+            if (_supplierRepository.GetSupplierProductsAddress(id).Result.Products.Any())
+            {
+                Notify("The supplier has registered products!");
+                return;
+            }
+
+            await _supplierRepository.RemoveAsync(id);
+        }
+
+        public async Task UpdateAddress(Address address)
+        {
+            if (ExecuteValidation(new AddressValidation(), address)) return;
+
+            await _addressRepository.UpdateAsync(address);
         }
     }
 }
