@@ -43,5 +43,9 @@ namespace DevIO.Business.Services
             await _productRepository.RemoveAsync(id);
         }
 
+        public void Dispose()
+        {
+            _productRepository.Dispose();
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace DevIO.Business.Interfaces
 {
-    public interface ISupplierService
+    public interface ISupplierService : IDisposable
     {
         Task Add(Supplier supplier);
         Task Update(Supplier supplier);

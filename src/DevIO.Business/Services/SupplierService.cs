@@ -71,5 +71,11 @@ namespace DevIO.Business.Services
 
             await _addressRepository.UpdateAsync(address);
         }
+
+        public void Dispose()
+        {
+            _supplierRepository.Dispose();
+            _addressRepository.Dispose();
+        }
     }
 }
