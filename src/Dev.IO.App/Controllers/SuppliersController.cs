@@ -8,21 +8,21 @@ namespace DevIO.App.Controllers
 {
     public class SuppliersController : BaseController
     {
-        private readonly ISupplierRepository _supplierRepository;
-        private readonly IAddressRepository _addressRepository;
+        private readonly ISupplierService _supplierService;
         private readonly IMapper _mapper;
 
-        public SuppliersController(ISupplierRepository supplierRepository, IAddressRepository addressRepository, IMapper mapper)
+        public SuppliersController(ISupplierService supplierService,
+                                   IMapper mapper,
+                                   INotificator notificator) : base(notificator)
         {
-            _supplierRepository = supplierRepository;
-            _addressRepository = addressRepository;
+            _supplierService = supplierService;
             _mapper = mapper;
         }
 
         [Route("suppliers-list")]
         public async Task<IActionResult> Index()
         {
-            return View(_mapper.Map<IEnumerable<SupplierViewModel>>(await _supplierRepository.GetAllAsync()));
+            return View(_mapper.Map<IEnumerable<SupplierViewModel>>(await _supplierService.GetAll()));
         }
 
         [Route("suppliers-details/{id:guid}")]
@@ -54,7 +54,9 @@ namespace DevIO.App.Controllers
 
             var supplier = _mapper.Map<Supplier>(supplierViewModel);
 
-            await _supplierRepository.AddAsync(supplier);
+            await _supplierService.Add(supplier);
+
+            if (!IsValidOperation()) return View(supplierViewModel);
 
             return RedirectToAction(nameof(Index));
         }
@@ -84,7 +86,9 @@ namespace DevIO.App.Controllers
 
             var supplier = _mapper.Map<Supplier>(supplierViewModel);
 
-            await _supplierRepository.UpdateAsync(supplier);
+            await _supplierService.Update(supplier);
+
+            if (!IsValidOperation()) return View(supplierViewModel);
 
             return RedirectToAction(nameof(Index));
 
@@ -112,7 +116,9 @@ namespace DevIO.App.Controllers
 
             if (supplierViewModel == null) return NotFound();
 
-            await _supplierRepository.RemoveAsync(id);
+            await _supplierService.Remove(id);
+
+            if (!IsValidOperation()) return View(supplierViewModel);
 
             return RedirectToAction(nameof(Index));
         }
@@ -145,7 +151,9 @@ namespace DevIO.App.Controllers
 
             if (!ModelState.IsValid) return PartialView("_UpdateAddress", supplierViewModel);
 
-            await _addressRepository.UpdateAsync(_mapper.Map<Address>(supplierViewModel.Address));
+            await _supplierService.UpdateAddress(_mapper.Map<Address>(supplierViewModel.Address));
+
+            if (!IsValidOperation()) return View(supplierViewModel);
 
             var url = Url.Action("GetAddress", "Suppliers", new { id = supplierViewModel.Address.SupplierId });
             return Json(new { success = true, url });
@@ -153,12 +161,12 @@ namespace DevIO.App.Controllers
 
         private async Task<SupplierViewModel> GetSupplierAddressAsync(Guid id)
         {
-            return _mapper.Map<SupplierViewModel>(await _supplierRepository.GetSupplierAddress(id));
+            return _mapper.Map<SupplierViewModel>(await _supplierService.GetSupplierAddress(id));
         }
 
         private async Task<SupplierViewModel> GetSupplierProductsAddressAsync(Guid id)
         {
-            return _mapper.Map<SupplierViewModel>(await _supplierRepository.GetSupplierProductsAddress(id));
+            return _mapper.Map<SupplierViewModel>(await _supplierService.GetSupplierProductsAddress(id));
         }
 
         private bool IsValidOperation()

@@ -9,5 +9,9 @@ namespace DevIO.Business.Interfaces
         Task Remove(Guid id);
         Task<Product> GetById(Guid id);
         Task<IEnumerable<Product>> GetAll();
+
+        public Task<IEnumerable<Product>> GetProductsSuppliers(Guid id);
+        public Task<IEnumerable<Product>> GetProductsSuppliers();
+        public Task<Product> GetProductSupplier(Guid supplierId);
     }
 }

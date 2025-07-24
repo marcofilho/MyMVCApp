@@ -1,9 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DevIO.Business.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DevIO.App.Controllers
 {
     public abstract class BaseController : Controller
     {
+        private readonly INotificator _notificator;
 
+        protected BaseController(INotificator notificator)
+        {
+            _notificator = notificator;
+        }
+
+        protected bool IsValidOperation()
+        {
+            return !_notificator.HasNotification();
+        }
     }
 }

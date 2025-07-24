@@ -24,6 +24,21 @@ namespace DevIO.Business.Services
             return await _productRepository.GetByIdAsync(id);
         }
 
+        public async Task<IEnumerable<Product>> GetProductsSuppliers(Guid id)
+        {
+            return await _productRepository.GetProductsSuppliers(id);
+        }
+
+        public async Task<IEnumerable<Product>> GetProductsSuppliers()
+        {
+            return await _productRepository.GetProductsSuppliers();
+        }
+
+        public Task<Product> GetProductSupplier(Guid supplierId)
+        {
+            return _productRepository.GetProductSupplier(supplierId);
+        }
+
         public async Task Add(Product product)
         {
             if (!ExecuteValidation(new ProductValidation(), product)) return;
@@ -45,7 +60,7 @@ namespace DevIO.Business.Services
 
         public void Dispose()
         {
-            _productRepository.Dispose();
+            _productRepository?.Dispose();
         }
     }
 }

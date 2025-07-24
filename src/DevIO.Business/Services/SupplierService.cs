@@ -27,6 +27,17 @@ namespace DevIO.Business.Services
             return await _supplierRepository.GetByIdAsync(id);
         }
 
+
+        public async Task<Supplier> GetSupplierAddress(Guid id)
+        {
+            return await _supplierRepository.GetSupplierAddress(id);
+        }
+
+        public async Task<Supplier> GetSupplierProductsAddress(Guid id)
+        {
+            return await _supplierRepository.GetSupplierProductsAddress(id);
+        }
+
         public async Task Add(Supplier supplier)
         {
             if (!ExecuteValidation(new SupplierValidation(), supplier) &&
@@ -74,8 +85,9 @@ namespace DevIO.Business.Services
 
         public void Dispose()
         {
-            _supplierRepository.Dispose();
-            _addressRepository.Dispose();
+            _supplierRepository?.Dispose();
+            _addressRepository?.Dispose();
         }
+
     }
 }

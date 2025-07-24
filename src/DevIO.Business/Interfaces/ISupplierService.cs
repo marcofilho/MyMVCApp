@@ -11,5 +11,8 @@ namespace DevIO.Business.Interfaces
         Task<IEnumerable<Supplier>> GetAll();
 
         Task UpdateAddress(Address address);
+
+        Task<Supplier> GetSupplierAddress(Guid id);
+        Task<Supplier> GetSupplierProductsAddress(Guid id);
     }
 }

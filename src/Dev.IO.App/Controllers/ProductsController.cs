@@ -8,21 +8,24 @@ namespace DevIO.App.Controllers
 {
     public class ProductsController : BaseController
     {
-        private readonly IProductRepository _productRepository;
-        private readonly ISupplierRepository _supplierRepository;
+        private readonly IProductService _productService;
+        private readonly ISupplierService _supplierService;
         private readonly IMapper _mapper;
 
-        public ProductsController(IProductRepository productRepository, ISupplierRepository supplierRepository, IMapper mapper)
+        public ProductsController(IProductService productService,
+                                  ISupplierService supplierService,
+                                  IMapper mapper,
+                                  INotificator notificator) : base(notificator)
         {
-            _productRepository = productRepository;
-            _supplierRepository = supplierRepository;
+            _productService = productService;
+            _supplierService = supplierService;
             _mapper = mapper;
         }
 
         [Route("products-list")]
         public async Task<IActionResult> Index()
         {
-            return View(_mapper.Map<IEnumerable<ProductViewModel>>(await _productRepository.GetProductsSuppliers()));
+            return View(_mapper.Map<IEnumerable<ProductViewModel>>(await _productService.GetProductsSuppliers()));
         }
 
         [Route("product-details/{id:guid}")]
@@ -62,7 +65,9 @@ namespace DevIO.App.Controllers
 
             productViewModel.Image = prefixImg + productViewModel.ImageUpload.FileName;
 
-            await _productRepository.AddAsync(_mapper.Map<Product>(productViewModel));
+            await _productService.Add(_mapper.Map<Product>(productViewModel));
+
+            if (!IsValidOperation()) return View(productViewModel);
 
             return RedirectToAction(nameof(Index));
         }
@@ -104,7 +109,9 @@ namespace DevIO.App.Controllers
             updateProduct.Price = productViewModel.Price;
             updateProduct.Active = productViewModel.Active;
 
-            await _productRepository.UpdateAsync(_mapper.Map<Product>(updateProduct));
+            await _productService.Update(_mapper.Map<Product>(updateProduct));
+
+            if (!IsValidOperation()) return View(productViewModel);
 
             return RedirectToAction(nameof(Index));
         }
@@ -126,22 +133,24 @@ namespace DevIO.App.Controllers
             var product = await GetProductAsync(id);
             if (product == null) return NotFound();
 
-            await _productRepository.RemoveAsync(id);
+            await _productService.Remove(id);
+
+            if (!IsValidOperation()) return View(product);
 
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<ProductViewModel> GetProductAsync(Guid id)
         {
-            var product = _mapper.Map<ProductViewModel>(await _productRepository.GetProductSupplier(id));
-            product.Suppliers = _mapper.Map<IEnumerable<SupplierViewModel>>(await _supplierRepository.GetAllAsync());
+            var product = _mapper.Map<ProductViewModel>(await _productService.GetProductSupplier(id));
+            product.Suppliers = _mapper.Map<IEnumerable<SupplierViewModel>>(await _supplierService.GetAll());
 
             return product;
         }
 
         private async Task<ProductViewModel> SetSuppliers(ProductViewModel productViewModel)
         {
-            productViewModel.Suppliers = _mapper.Map<IEnumerable<SupplierViewModel>>(await _supplierRepository.GetAllAsync());
+            productViewModel.Suppliers = _mapper.Map<IEnumerable<SupplierViewModel>>(await _supplierService.GetAll());
 
             return productViewModel;
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DevIO.Business.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DevIO.App.Extensions
 {
@@ -14,7 +15,7 @@ namespace DevIO.App.Extensions
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var notifications = await Task.FromResult(_notificator.GetNotifications());
-            notifications.ForEach(c => ViewData.ModelState.AddModelError(string.Empty, c.Mensagem));
+            notifications.ForEach(c => ViewData.ModelState.AddModelError(string.Empty, c.Message));
 
             return View();
         }
