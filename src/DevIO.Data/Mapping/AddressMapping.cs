@@ -23,7 +23,6 @@ namespace DevIO.Data.Mapping
                 .HasColumnType("varchar(8)");
 
             builder.Property(p => p.Complement)
-                .IsRequired()
                 .HasColumnType("varchar(250)");
 
             builder.Property(p => p.Neighborhood)
@@ -37,7 +36,6 @@ namespace DevIO.Data.Mapping
             builder.Property(p => p.State)
                 .IsRequired()
                 .HasColumnType("varchar(50)");
-
 
             builder.ToTable("Addresses");
         }

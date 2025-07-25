@@ -13,7 +13,6 @@ namespace DevIO.App.Extensions
             _contextAccessor = contextAccessor;
         }
 
-
         [HtmlAttributeName("supress-by-claim-name")]
         public string IdentityClaimName { get; set; }
 

@@ -8,7 +8,6 @@
         public bool Active { get; set; }
         public Address Address { get; set; }
 
-        // EF Relations
         public IEnumerable<Product> Products { get; set; }
 
     }
