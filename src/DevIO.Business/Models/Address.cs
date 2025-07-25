@@ -11,7 +11,7 @@
         public string City { get; set; }
         public string State { get; set; }
 
-        // EF Relations
+        /* EF Relation */
         public Supplier Supplier { get; set; }
     }
 }

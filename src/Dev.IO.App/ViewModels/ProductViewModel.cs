@@ -1,4 +1,5 @@
 ﻿using DevIO.App.Extensions;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace DevIO.App.ViewModels
@@ -9,7 +10,7 @@ namespace DevIO.App.ViewModels
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "The field {0} is required.")]
-        [Display(Name = "Supplier")]
+        [DisplayName("Supplier")]
         public Guid SupplierId { get; set; }
 
         [Required(ErrorMessage = "The field {0} is required.")]
@@ -20,10 +21,10 @@ namespace DevIO.App.ViewModels
         [StringLength(100, ErrorMessage = "The field {0} must have between {2} and {1} characters", MinimumLength = 2)]
         public string Description { get; set; }
 
-        public string Image { get; set; }
-
-        [Display(Name = "Product Image")]
+        [DisplayName("Product Image")]
         public IFormFile ImageUpload { get; set; }
+
+        public string Image { get; set; }
 
         [Currency]
         [Required(ErrorMessage = "The field {0} is required.")]
@@ -32,7 +33,7 @@ namespace DevIO.App.ViewModels
         [ScaffoldColumn(false)]
         public DateTime CreatedAt { get; set; }
 
-        [Display(Name = "Is Active?")]
+        [DisplayName("Is Active?")]
         public bool Active { get; set; }
 
         public SupplierViewModel Supplier { get; set; }

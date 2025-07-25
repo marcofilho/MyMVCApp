@@ -32,7 +32,7 @@ namespace DevIO.App.Extensions
 
             output.Attributes.RemoveAll("href");
             output.Attributes.Add(new TagHelperAttribute("style", "cursor: not-allowed"));
-            output.Attributes.Add(new TagHelperAttribute("title", "Você não tem permissão"));
+            output.Attributes.Add(new TagHelperAttribute("title", "You don't have permission."));
         }
     }
 }

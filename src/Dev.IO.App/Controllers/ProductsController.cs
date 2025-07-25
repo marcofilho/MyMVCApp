@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
+using DevIO.App.Extensions;
 using DevIO.App.ViewModels;
 using DevIO.Business.Interfaces;
 using DevIO.Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevIO.App.Controllers
 {
+    [Authorize]
     public class ProductsController : BaseController
     {
         private readonly IProductService _productService;
@@ -22,12 +25,14 @@ namespace DevIO.App.Controllers
             _mapper = mapper;
         }
 
+        [AllowAnonymous]
         [Route("products-list")]
         public async Task<IActionResult> Index()
         {
             return View(_mapper.Map<IEnumerable<ProductViewModel>>(await _productService.GetProductsSuppliers()));
         }
 
+        [AllowAnonymous]
         [Route("product-details/{id:guid}")]
         public async Task<IActionResult> Details(Guid id)
         {
@@ -40,12 +45,14 @@ namespace DevIO.App.Controllers
             return View(productViewModel);
         }
 
+        [ClaimsAuthorize("Product", "Add")]
         [Route("new-product")]
         public async Task<IActionResult> Create()
         {
             return View(await SetSuppliers(new ProductViewModel()));
         }
 
+        [ClaimsAuthorize("Product", "Add")]
         [Route("new-product")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -54,17 +61,10 @@ namespace DevIO.App.Controllers
             productViewModel = await SetSuppliers(productViewModel);
             if (!ModelState.IsValid) return View(productViewModel);
 
-            if (productViewModel.ImageUpload == null || productViewModel.ImageUpload.Length <= 0)
-            {
-                ModelState.AddModelError(string.Empty, "Please select an image for the product.");
-                return View(productViewModel);
-            }
-
             var prefixImg = Guid.NewGuid() + "_";
             if (!await FileUpload(productViewModel.ImageUpload, prefixImg)) return View(productViewModel);
 
             productViewModel.Image = prefixImg + productViewModel.ImageUpload.FileName;
-
             await _productService.Add(_mapper.Map<Product>(productViewModel));
 
             if (!IsValidOperation()) return View(productViewModel);
@@ -72,6 +72,7 @@ namespace DevIO.App.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [ClaimsAuthorize("Product", "Edit")]
         [Route("edit-product/{id:guid}")]
         public async Task<IActionResult> Edit(Guid id)
         {
@@ -84,6 +85,7 @@ namespace DevIO.App.Controllers
             return View(productViewModel);
         }
 
+        [ClaimsAuthorize("Product", "Edit")]
         [Route("edit-product/{id:guid}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -116,6 +118,7 @@ namespace DevIO.App.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [ClaimsAuthorize("Product", "Delete")]
         [Route("delete-product/{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -125,6 +128,7 @@ namespace DevIO.App.Controllers
             return View(productViewModel);
         }
 
+        [ClaimsAuthorize("Product", "Delete")]
         [Route("delete-product/{id:guid}")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -136,6 +140,8 @@ namespace DevIO.App.Controllers
             await _productService.Remove(id);
 
             if (!IsValidOperation()) return View(product);
+
+            TempData["Success"] = "Product removed with success!";
 
             return RedirectToAction(nameof(Index));
         }

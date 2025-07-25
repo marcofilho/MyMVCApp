@@ -23,14 +23,14 @@ namespace DevIO.Business.Services
             }
         }
 
-        protected void Notify(string mensagem)
+        protected void Notify(string message)
         {
-            _notificator.Handle(new Notification(mensagem));
+            _notificator.Handle(new Notification(message));
         }
 
-        protected bool ExecuteValidation<TV, TE>(TV validacao, TE entidade) where TV : AbstractValidator<TE> where TE : Entity
+        protected bool ExecuteValidation<TV, TE>(TV validation, TE model) where TV : AbstractValidator<TE> where TE : Entity
         {
-            var validator = validacao.Validate(entidade);
+            var validator = validation.Validate(model);
 
             if (validator.IsValid) return true;
 

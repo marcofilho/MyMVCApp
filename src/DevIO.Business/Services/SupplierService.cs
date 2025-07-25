@@ -73,6 +73,13 @@ namespace DevIO.Business.Services
                 return;
             }
 
+            var address = await _addressRepository.GetAddressBySupplier(id);
+
+            if (address != null)
+            {
+                await _addressRepository.RemoveAsync(address.Id);
+            }
+
             await _supplierRepository.RemoveAsync(id);
         }
 

@@ -10,6 +10,7 @@
         public DateTime CreatedAt { get; set; }
         public bool Active { get; set; }
 
+        /* EF Relations */
         public Supplier Supplier { get; set; }
     }
 }

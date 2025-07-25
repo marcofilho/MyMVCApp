@@ -39,7 +39,7 @@
                 <div class="custom-file">
                     <input type="file" class="custom-file-input" id="ImagemUpload" asp-for="ImageUpload">
                     <label data-browse="Search" style="width: 400px" class="custom-file-label" for="ImagemUpload"></label>
-                    <label style="display: none" id="img_nome"></label>
+                    <label style="display: none" id="img_name"></label>
                 </div>
 
                 <span asp-validation-for="ImageUpload" class="text-danger"></span>
@@ -58,7 +58,7 @@
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Register" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary" />
                 <a class="btn btn-info" asp-action="Index">Back</a>
             </div>
         </form>
@@ -72,8 +72,8 @@
 
     <script>
         $("#ImagemUpload").change(function () {
-            $("#img_nome").text(this.files[0].name);
-            $("#img_nome")[0].style.display = 'block';
+            $("#img_name").text(this.files[0].name);
+            $("#img_name")[0].style.display = 'block';
         });
 
         $("#ImagemUpload").attr("data-val", "true");

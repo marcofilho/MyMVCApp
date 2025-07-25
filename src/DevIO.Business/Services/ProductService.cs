@@ -8,8 +8,8 @@ namespace DevIO.Business.Services
     {
         private readonly IProductRepository _productRepository;
 
-        public ProductService(IProductRepository productRepository, INotificator notificator)
-                    : base(notificator)
+        public ProductService(IProductRepository productRepository,
+                              INotificator notificator) : base(notificator)
         {
             _productRepository = productRepository;
         }
@@ -26,7 +26,7 @@ namespace DevIO.Business.Services
 
         public async Task<IEnumerable<Product>> GetProductsSuppliers(Guid id)
         {
-            return await _productRepository.GetProductsSuppliers(id);
+            return await _productRepository.GetProductsBySupplier(id);
         }
 
         public async Task<IEnumerable<Product>> GetProductsSuppliers()

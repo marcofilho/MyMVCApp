@@ -15,17 +15,17 @@ namespace DevIO.App.Extensions
 
     public class ClaimsAuthorizeAttribute : TypeFilterAttribute
     {
-        public ClaimsAuthorizeAttribute(string claimName, string claimValue) : base(typeof(RequisitoClaimFilter))
+        public ClaimsAuthorizeAttribute(string claimName, string claimValue) : base(typeof(RequirementClaimFilter))
         {
             Arguments = new object[] { new Claim(claimName, claimValue) };
         }
     }
 
-    public class RequisitoClaimFilter : IAuthorizationFilter
+    public class RequirementClaimFilter : IAuthorizationFilter
     {
         private readonly Claim _claim;
 
-        public RequisitoClaimFilter(Claim claim)
+        public RequirementClaimFilter(Claim claim)
         {
             _claim = claim;
         }

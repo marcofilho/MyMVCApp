@@ -14,9 +14,9 @@ namespace DevIO.App.Extensions
             {
                 var currency = Convert.ToDecimal(value, new CultureInfo("en-US"));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return new ValidationResult($"The value '{value}' is not a valid currency format. Error: {ex.Message}");
+                return new ValidationResult($"The value '{value}' is not a valid currency format.");
             }
 
             return ValidationResult.Success;
@@ -47,7 +47,7 @@ namespace DevIO.App.Extensions
     public class CurrencyValidationAttributeAdapterProvider : IValidationAttributeAdapterProvider
     {
         private readonly IValidationAttributeAdapterProvider _baseProvider = new ValidationAttributeAdapterProvider();
-        
+
         public IAttributeAdapter GetAttributeAdapter(ValidationAttribute attribute, IStringLocalizer stringLocalizer)
         {
             if (attribute is CurrencyAttribute currencyAttribute)

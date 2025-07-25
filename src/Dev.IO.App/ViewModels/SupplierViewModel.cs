@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace DevIO.App.ViewModels
 {
@@ -15,10 +16,10 @@ namespace DevIO.App.ViewModels
         [StringLength(14, ErrorMessage = "The field {0} must have between {2} and {1} characters", MinimumLength = 11)]
         public string Document { get; set; }
 
-        [Display(Name = "Type")]
+        [DisplayName("Type")]
         public int Type { get; set; }
-
-        [Display(Name = "Is Active?")]
+        
+        [DisplayName("Is Active?")]
         public bool Active { get; set; }
 
         public AddressViewModel Address { get; set; }
